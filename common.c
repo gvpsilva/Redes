@@ -4,26 +4,26 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <unistd.h>
-void logexit(const char *msg)
+void logexit(const char *msg) //MÉTODO PARA EXIBIR O ERRO E ENCERRAR A APLICAÇÃO
 {
   perror(msg);
   exit(EXIT_FAILURE);
 }
-
-int addrparse(const char *addstr, const char *portstr, struct sockaddr_storage *storage)
+// MÉTODO VALIDA QUAL PROTOCOLO ESTÁ SENDO E INFORMA INFORMAÇÕES A CERCA DISSO. 
+int addrparse(const char *addstr, const char *portstr, struct sockaddr_storage *storage) 
 {
   if (addstr == NULL || portstr == NULL)
   {
     return -1;
   }
-  uint16_t port = (uint16_t)atoi(portstr); // unsigned short
+  uint16_t port = (uint16_t)atoi(portstr); 
   if (port == 0)
   {
     return -1;
   }
-  port = htons(port); // host to network short
+  port = htons(port);
 
-  struct in_addr inaddr4; // 32-bit IP address
+  struct in_addr inaddr4; //IPV4
   if (inet_pton(AF_INET, addstr, &inaddr4))
   {
     struct sockaddr_in *addr4 = (struct sockaddr_in *)storage;
@@ -32,14 +32,13 @@ int addrparse(const char *addstr, const char *portstr, struct sockaddr_storage *
     addr4->sin_addr = inaddr4;
     return 0;
   }
-  struct in6_addr inaddr6; // 128-bit IPv6 address
+  struct in6_addr inaddr6; //IPV6
   if (inet_pton(AF_INET6, addstr, &inaddr6))
   {
     struct sockaddr_in6 *addr6 = (struct sockaddr_in6 *)storage;
     addr6->sin6_family = AF_INET6;
     addr6->sin6_port = port;
     memcpy(&(addr6->sin6_addr), &inaddr6, sizeof(inaddr6));
-    // addr6->sin6_addr= inaddr6;
     return 0;
   }
   return -1;
@@ -80,9 +79,9 @@ void addrtostr(const struct sockaddr *addr, char *str, size_t strsize)
   }
 }
 
-int server_sockaddr_init(const char *proto, const char *portstr, struct sockaddr_storage *storage)
-{
-  uint16_t port = (uint16_t)atoi(portstr); // unsigned short
+int server_sockaddr_init(const char *proto, const char *portstr, struct sockaddr_storage *storage) //INICIALIZA O SERVIDOR, DE ACORDO COM O PROTOCOLO INFORMADO IPV4 PI IPV6
+ {
+  uint16_t port = (uint16_t)atoi(portstr);
   if (port == 0)
   {
     return -1;
