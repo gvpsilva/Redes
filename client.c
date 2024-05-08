@@ -51,8 +51,9 @@ int main(int argc, char **argv)
     exit(EXIT_SUCCESS);
   }
   int option = -1;
-  while (option != 0 && option != 1) 
+  while (option != 0 && option != 1) //VALIDA SE UMA DAS OPÇÕES FOI SELECIONADA, SENDO O VALOR INICIAL -1, PARA CASO OCORRA ALGUMA RECUSA MOSTRE NOVAMENTE 
   {
+    //MOSTRA OPÇÕES PARA O USUÁRIO SELECIONAR
     fprintf(stderr, "0-Sair\n");
     fprintf(stderr, "1-Solicitar Corrida\n");
 
@@ -66,7 +67,7 @@ int main(int argc, char **argv)
       snprintf(buf, BUFSZ, "%lf %lf", coordCli.latitude, coordCli.longitude);//MONTA MENSAGEM A SER ENVIADA PARA O SERVIDOR
 
       int count = send(s, buf, strlen(buf) + 1, 0);//ENVIA A MENSAGEM PARA O SERVIDOR, SOLICITANDO A CORRIDA
-      if (count != strlen(buf) + 1)
+      if (count != strlen(buf) + 1) //VALIDA SE A MENSAGEM NÃO ESTÁ NULA
       {
         logexit("send");
       }
@@ -76,7 +77,7 @@ int main(int argc, char **argv)
         count = recv(s, buf, BUFSZ, 0); //RECEBE DADOS DO SERVIDOR
         if (atof(buf) > 0)
         {
-          double distance = atof(buf);
+          double distance = atof(buf);//PEGA O VALOR DA DISTANCIA DE STRING E CONVERTE PARA DISTANCIA
           int distance_meters = (int)(distance * 1000); // Convertendo para metros
           if (distance_meters != 0)//VERIFICA SE A DISTANCIA É ZERO
           {
@@ -86,8 +87,8 @@ int main(int argc, char **argv)
         }
         else if (atoi(buf) == -1)//CASO A CORRIDA SEJA RECUSADA PELO SERVIDOR
         {
-          printf("Não foi encontrado um motorista.\n"); //
-          option=-1;
+          printf("Não foi encontrado um motorista.\n"); //MENSAGEM REOTRNADA PARA O USUÁRIO.
+          option=-1; // OPTION RECEBE VALOR -1, PARA INDICAR QUE DEVE EXIBIR O MENU NOVAMENTE, PARA O USUÁRIO SOLICITAR NOVAMENTE O UBER OU CANCELAR A SOLICITAÇÃO.
           break;
         }
         else if (fabs(atof(buf)) < 0.01){
