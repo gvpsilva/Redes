@@ -23,52 +23,41 @@ typedef struct //struct de coordenadas geograficas
   double longitude;
 } Coordinate;
 
-int main(int argc, char **argv)
-{
-  if (argc < 3)
-  {
+int main(int argc, char **argv){
+  if (argc < 3){
     usage(argc, argv);
   }
 
   struct sockaddr_storage storage;
-  if (0 != addrparse(argv[1], argv[2], &storage))
-  {
+  if (0 != addrparse(argv[1], argv[2], &storage))  {
     usage(argc, argv);
   }
-
   int s = socket(storage.ss_family, SOCK_STREAM, 0); //cria o socket
-  if (s == -1)
-  {
+  if (s == -1){
     logexit("socket");
   }
-
   struct sockaddr *addr = (struct sockaddr *)(&storage);
-
-  if (0 != connect(s, addr, sizeof(storage))) //busca estabelecer conexão com o servidor
-  {
+  if (0 != connect(s, addr, sizeof(storage))){ //busca estabelecer conexão com o servidor
     fprintf(stderr, "Não foi encontrado um motorista\n");
     close(s);
     exit(EXIT_SUCCESS);
   }
   int option = -1;
-  while (option != 0 && option != 1) //VALIDA SE UMA DAS OPÇÕES FOI SELECIONADA, SENDO O VALOR INICIAL -1, PARA CASO OCORRA ALGUMA RECUSA MOSTRE NOVAMENTE 
-  {
+  while (option != 0 && option != 1){ //VALIDA SE UMA DAS OPÇÕES FOI SELECIONADA, SENDO O VALOR INICIAL -1, PARA CASO OCORRA ALGUMA RECUSA MOSTRE NOVAMENTE 
     //MOSTRA OPÇÕES PARA O USUÁRIO SELECIONAR
     fprintf(stderr, "0-Sair\n");
     fprintf(stderr, "1-Solicitar Corrida\n");
-
     scanf("%d", &option);
-    if (option == 1)
-    {
-     
-      Coordinate coordCli = {-19.8642, -43.9620}; //Coordenadas Escola de Bela Artes
-
+    if (option == 1){
+     printf("Informe as coordenadas geograficas\n");
+     double latitude,longitude;
+     scanf("%lf",&latitude);
+     scanf("%lf",&longitude);
+     Coordinate coordCli = {latitude,longitude};
       char buf[BUFSZ];
       snprintf(buf, BUFSZ, "%lf %lf", coordCli.latitude, coordCli.longitude);//MONTA MENSAGEM A SER ENVIADA PARA O SERVIDOR
-
       int count = send(s, buf, strlen(buf) + 1, 0);//ENVIA A MENSAGEM PARA O SERVIDOR, SOLICITANDO A CORRIDA
-      if (count != strlen(buf) + 1) //VALIDA SE A MENSAGEM NÃO ESTÁ NULA
-      {
+      if (count != strlen(buf) + 1){ //VALIDA SE A MENSAGEM NÃO ESTÁ NULA
         logexit("send");
       }
       while (1)
