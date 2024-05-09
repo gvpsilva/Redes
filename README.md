@@ -13,3 +13,5 @@ Este projeto visa desenvolver um simulador de um aplicativo de corridas utilizan
 - Comunicação entre cliente e servidor utilizando sockets para envio e recebimento de dados.
 - Aceitação e processamento de solicitações de corrida.
 - Simulação de um ambiente de corridas virtuais.
+
+![Teste utilizando IPv6](Teste_corrida_ipv6.png)
