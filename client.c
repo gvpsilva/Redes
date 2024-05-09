@@ -12,7 +12,7 @@
 
 void usage(int argc, char **argv) //Exibe Mensagem caso ocorra erro com relação a conexão.
 {
-  printf("usage: %s <server IP> <server port>\n", argv[0]);
+  printf("usage: %s<ipv4|ipv6> <server IP> <server port>\n", argv[0]);
   printf("example: %s 127.0.0.1 5151\n", argv[0]);
   exit(EXIT_FAILURE);
 }
@@ -29,7 +29,7 @@ int main(int argc, char **argv){
   }
 
   struct sockaddr_storage storage;
-  if (0 != addrparse(argv[1], argv[2], &storage))  {
+  if (0 != addrparse(argv[2], argv[3], &storage))  {
     usage(argc, argv);
   }
   int s = socket(storage.ss_family, SOCK_STREAM, 0); //cria o socket
@@ -80,7 +80,7 @@ int main(int argc, char **argv){
           option=-1; // OPTION RECEBE VALOR -1, PARA INDICAR QUE DEVE EXIBIR O MENU NOVAMENTE, PARA O USUÁRIO SOLICITAR NOVAMENTE O UBER OU CANCELAR A SOLICITAÇÃO.
           break;
         }
-        else if (fabs(atof(buf)) < 0.01){
+        else if (fabs(atof(buf)) < 0.01 && buf!=NULL){
             printf("O motorista chegou!\n"); // INDICA QUE O MOTORISTA CHEGOU DEVIDO A DISTANCIA SER ZERO
             break;
         }

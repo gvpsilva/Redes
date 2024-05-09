@@ -20,7 +20,7 @@ double to_radians(double degrees)
 }
 void usage(int argc, char **argv) // USADA PARA QUANDO OCORRE ERRO DE CONEXÃO DEVIDO PROTOCOLO OU PORTA
 {
-  printf("usage: %s <v4|v6> <server port>\n", argv[0]);
+  printf("usage: %s <ipv4|ipv6> <server port>\n", argv[0]);
   printf("example: %s v4 5151\n", argv[0]);
   exit(EXIT_FAILURE);
 }
